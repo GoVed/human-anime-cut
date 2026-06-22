@@ -53,6 +53,27 @@ python live_cam.py --checkpoint models/checkpoint_epoch_100.pt --image-size 256
 ```
 *Press `q` inside the windows to quit the camera stream.*
 
+### 4. Running the Web Translation App
+The repository includes a responsive FastAPI web server with a side-by-side drag comparison slider UI for mobile and desktop screens.
+
+1. **Deploy Model Checkpoint**:
+   Ensure you have a trained model checkpoint placed at `models/checkpoint_latest.pt`. (If the checkpoint is missing, the application will initialize an untrained generator as a fallback).
+
+2. **Start the Web Server**:
+   Execute the server using Uvicorn:
+   ```bash
+   uvicorn app.main:app --host 0.0.0.0 --port 8000
+   ```
+   Or explicitly via the virtualenv binary:
+   ```bash
+   .venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000
+   ```
+
+3. **Access the Interface**:
+   Open a browser and navigate to `http://localhost:8000` (or `http://<server-ip>:8000` if running on a remote host).
+
+   *Memory and Cooldown optimization:* The server automatically runs generator inference in half-precision (FP16) mode on CUDA devices (consuming only ~24MB allocated VRAM) and enforces an in-memory IP rate-limit of 1 translation per 3 seconds.
+
 ## SOTA Architecture Specifications (PyTorch Port)
 * **Instance Normalization**: Uses `InstanceNorm2d` (with affine parameters) for high-fidelity style transfer.
 * **ResNet Generator (SE & SA Attention)**: Switch from simple U-Net to a ResNet-9 backbone with **Squeeze-and-Excitation (SE)** channel attention in all residual blocks, and **Self-Attention (SA)** in the bottleneck to coordinate global structures.
