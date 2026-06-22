@@ -56,6 +56,7 @@ python live_cam.py --checkpoint models/checkpoint_epoch_100.pt --image-size 256
 ### 4. Running the Web Translation App
 The repository includes a responsive FastAPI web server with a side-by-side drag comparison slider UI for mobile and desktop screens.
 
+#### Option A: Running locally on host
 1. **Deploy Model Checkpoint**:
    Ensure you have a trained model checkpoint placed at `models/checkpoint_latest.pt`. (If the checkpoint is missing, the application will initialize an untrained generator as a fallback).
 
@@ -72,7 +73,43 @@ The repository includes a responsive FastAPI web server with a side-by-side drag
 3. **Access the Interface**:
    Open a browser and navigate to `http://localhost:8000` (or `http://<server-ip>:8000` if running on a remote host).
 
-   *Memory and Cooldown optimization:* The server automatically runs generator inference in half-precision (FP16) mode on CUDA devices (consuming only ~24MB allocated VRAM) and enforces an in-memory IP rate-limit of 1 translation per 3 seconds.
+#### Option B: Running with Docker (Background/Detached mode)
+To avoid keeping a console session open, you can build and run the web app in a detached Docker container.
+
+1. **Build the Docker Image**:
+   ```bash
+   docker build -t human-anime-cut .
+   ```
+
+2. **Run the Container (Detached)**:
+   Mount your host's `models/` directory so the container can access your checkpoints:
+   ```bash
+   docker run -d \
+     -p 8000:8000 \
+     -v $(pwd)/models:/app/models \
+     --name human-anime-cut \
+     human-anime-cut
+   ```
+
+3. **Managing the Container**:
+   * View running containers:
+     ```bash
+     docker ps
+     ```
+   * Inspect background logs:
+     ```bash
+     docker logs -f human-anime-cut
+     ```
+   * Stop the background service:
+     ```bash
+     docker stop human-anime-cut
+     ```
+   * Restart the background service:
+     ```bash
+     docker start human-anime-cut
+     ```
+
+   *Memory and Cooldown optimization:* The server automatically runs generator inference in half-precision (FP16) mode on CUDA devices (consuming only ~24MB allocated VRAM) and falls back gracefully to CPU if GPU drivers are unavailable inside the container. It also enforces an in-memory IP rate-limit of 1 translation per 3 seconds.
 
 ## SOTA Architecture Specifications (PyTorch Port)
 * **Instance Normalization**: Uses `InstanceNorm2d` (with affine parameters) for high-fidelity style transfer.
