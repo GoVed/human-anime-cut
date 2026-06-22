@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Instant Anime Style Transfer</title>
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css?v=4">
+</head>
+<body>
+    <div class="glass-bg"></div>
+    
+    <div class="container">
+        <header>
+            <h1 class="glow-text">AI Anime Generator</h1>
+            <p class="subtitle">Transform your photos into Ghibli-esque anime illustrations instantly</p>
+        </header>
+
+        <main>
+            <!-- Upload/Dropzone Card -->
+            <div id="dropzone-card" class="card dropzone-active">
+                <div class="drop-area" id="drop-area">
+                    <div class="icon-wrapper">
+                        <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h2>Drag & Drop your image</h2>
+                    <p>Supports PNG, JPG, or JPEG (Max 10MB)</p>
+                    <div class="btn-group">
+                        <label for="file-input" class="btn primary-btn btn-glow">Browse File</label>
+                        <input type="file" id="file-input" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Card -->
+            <div id="loading-card" class="card hidden">
+                <div class="loader-content">
+                    <div class="spinner">
+                        <div class="double-bounce1"></div>
+                        <div class="double-bounce2"></div>
+                    </div>
+                    <h3 id="loader-title">Stylizing Image...</h3>
+                    <p id="loader-status" class="pulse-text">Loading generator weights on GPU...</p>
+                </div>
+            </div>
+
+            <!-- Result Card (Dynamic comparison slider) -->
+            <div id="result-card" class="card hidden">
+                <div class="result-container">
+                    <div class="comparison-slider" id="slider-container">
+                        <!-- Before Image -->
+                        <img src="" id="before-img" class="slider-image" alt="Original Photo">
+                        
+                        <!-- After Image (Resizable overlay) -->
+                        <div class="overlay-container" id="overlay-container">
+                            <img src="" id="after-img" class="slider-image" alt="Anime Illustration">
+                        </div>
+                        
+                        <!-- Handle -->
+                        <div class="slider-handle" id="slider-handle">
+                            <div class="handle-arrow-left"></div>
+                            <div class="handle-arrow-right"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions-panel">
+                    <button class="btn secondary-btn" id="reset-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        Try Another
+                    </button>
+                    <a href="#" class="btn primary-btn btn-glow" id="download-btn" download="anime_styled.png">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Download Image
+                    </a>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Powered by PyTorch CUDA FP16 Inference | VRAM Efficient Model Backend</p>
+        </footer>
+    </div>
+
+    <script src="index.js?v=4"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+# Dataset paths
+# (Configured for the downloaded full-image photo-to-anime scenery style dataset)
+human_data_dir: "data/dataset/train_photo"
+test_human_data_dir: "data/dataset/test/HR_photo"
+anime_data_dir: "data/dataset/combined_style"
+
+# Output and checkpoints
+output_dir: "sample"
+model_save_dir: "models"
+
+# General settings
+seed: 42
+num_workers: 4
+image_size: 256           # Set to 256 for optimal details on your 16GB VRAM GPU
+
+# Training hyperparameters
+epochs: 100
+batch_size: 4             # Batch size 4 runs comfortably on your 16GB GPU for 256x256
+learning_rate: 0.0002
+
+# Logging and checkpointing intervals
+sample_step_interval: 100 # Step interval to save training samples
+checkpoint_interval: 10   # Epoch interval to save checkpoint

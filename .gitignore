@@ -1,0 +1,24 @@
+# Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python caching
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Large directories / training outputs
+data/
+models/
+sample/
+output/
+scratch/
+
+# IDE and utility directories
+.continue/
+.vs/
+.vscode/
+.idea/
+.DS_Store
