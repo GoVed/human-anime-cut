@@ -69,7 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    dropArea.addEventListener('click', () => {
+    dropArea.addEventListener('click', (e) => {
+        // If the user clicked the file input directly or clicked the associated label,
+        // let the browser handle the event natively. Do not call fileInput.click() programmatically,
+        // as iOS Safari blocks programmatically triggered file inputs if a native click is already propagating.
+        if (e.target === fileInput || e.target.closest('label[for="file-input"]')) {
+            return;
+        }
         fileInput.click();
     });
 
@@ -81,8 +87,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // File Processing
     function handleFile(file) {
-        if (!file.type.startsWith('image/')) {
-            alert('Error: Please upload a valid image file (PNG, JPG).');
+        // iOS Safari sometimes reports empty file.type for certain formats or transfers.
+        // We validate using both the MIME type and the file extension for robustness.
+        const validExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif'];
+        const fileName = file.name.toLowerCase();
+        const hasValidExtension = validExtensions.some(ext => fileName.endsWith(ext));
+        const isImageMime = file.type && file.type.startsWith('image/');
+
+        if (!isImageMime && !hasValidExtension) {
+            alert('Error: Please upload a valid image file (PNG, JPG, HEIC).');
             return;
         }
         
